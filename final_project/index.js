@@ -46,34 +46,17 @@ async function getBooksAsync() {
         console.error('Error fetching books (Async/Await):', error);
     }
 }
-function getBooksPromise() {
-    axios.get('http://localhost:5000')
-        .then(response => {
-            console.log('Books fetched successfully (Promise):', response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching books (Promise):', error);
-        });
-}
-
-app.get('/books/:isbn', async (req, res) => {
-    const isbn = req.params.isbn;
-
+app.get('/books', async (req, res) => {
     try {
-        // Simulate fetching book details based on ISBN from booksdb.js
-        const bookDetails = books.find(book => book.isbn === isbn);
-        if (!bookDetails) {
-            return res.status(404).json({ message: 'Book not found' });
-        }
-        return res.status(200).json(bookDetails);
+        const response = await axios.get('https://kattasrivani-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai');
+        return res.status(200).json(response.data);
     } catch (error) {
-        console.error('Error fetching book details (Async/Await):', error);
+        console.error('Error fetching books (Async/Await):', error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
-getBooksAsync();
-getBooksPromise();
+
 app.get('/books/:isbn', async (req, res) => {
     const isbn = req.params.isbn;
  try {
@@ -87,22 +70,20 @@ app.get('/books/:isbn', async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-
-app.get('/books/:isbn', (req, res) => {
-    const isbn = req.params.isbn;
-const bookDetails = books.find(book => book.isbn === isbn);
-    new Promise((resolve, reject) => {
-        if (!bookDetails) {
-            return reject(new Error('Book not found'));
-        }
-        resolve(bookDetails);
-    })
-    .then(book => res.status(300).json(book))
-    .catch(err => {
-        console.error('Error fetching book details (Promise):', err);
-        return res.status(404).json({ message: 'Book not found' });
-    });
+// Function to get book details by Author
+app.get('/books/author/:author', async (req, res) => {
+    const author = req.params.author;
+    try {
+        const response = await axios.get(`https://kattasrivani-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/books?author=${author}`);
+        return res.status(200).json(response.data);
+    } catch (error) {
+        console.error('Error fetching books by author (Async/Await):', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
+
+
+
 app.get('/title/:title', async function (req, res) {
     const title = req.params.title;
 

@@ -33,9 +33,6 @@ const authenticatedUser = (username, password) => {
     return user && user.password === password; // Returns true if both match
 };
 
-// Example usage
-console.log(isValid("Srivani")); // true
-console.log(authenticatedUser("Srivani", "Srivani@123")); // true
 
 
 
@@ -60,7 +57,7 @@ regd_users.post("/login", (req, res) => {
 });
 
 // Add or modify a book review
-regd_users.post("/auth/review/:isbn", (req, res) => {
+regd_users.put("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
     const { review } = req.body;
 
